@@ -9,8 +9,8 @@ import { listProductDetails } from '../actions/productActions'
 
 
 function ProductEditScreen() {
-
-  const {productId}  = useParams()
+  const params = useParams()
+  const productId = params.id
 
   const navigate = useNavigate()
 
@@ -26,7 +26,7 @@ function ProductEditScreen() {
 
   const productDetails = useSelector(state => state.productDetails)
   const { error, loading, product } = productDetails
-  navigate(`/admin/product/${productId}/edit}`)
+  // navigate(`/admin/product/${productId}/edit}`)
   console.log(product.name)
   console.log(productId)
 
