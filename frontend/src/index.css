@@ -1,0 +1,60 @@
+main{
+  min-height: 80vh;
+}
+
+h1{
+  font-size: 1.8rem;
+  padding:1rem 0;
+}
+
+h2{
+  font-size: 1.4rem;
+  padding:0.5rem 0;
+}
+
+.rating span {
+  margin:0.1rem;
+}
+
+h3 {
+  padding: 1rem 0;
+}
+
+
+/* ---------------------- Add to basket button */
+
+.btn {
+  width: 100%;
+}
+
+/* ---------------------- Go back button on basket */
+
+a.btn.btn-light.my-3 {
+  text-align: left;
+}
+
+img#logo {
+  width: 12%;
+  padding: 0px;
+}
+
+/* ----------------------------------- Login & Basket Navigation */
+
+i.fas.fa-shopping-basket::before {
+  color: orange;
+  padding-right: 5px;
+}
+
+i.fas.fa-user::before {
+  color: orange;
+  padding-right: 5px;
+}
+
+/* ----------------------------------- Main Navigation */
+
+nav.navbar.navbar-expand-lg.navbar-light.bg-warning {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+
