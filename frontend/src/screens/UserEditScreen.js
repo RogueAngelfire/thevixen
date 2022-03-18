@@ -10,7 +10,8 @@ import { USER_UPDATE_RESET } from '../constants/userConstants'
 
 function UserEditScreen() {
 
-  const {userId}  = useParams()
+  const params  = useParams()
+  const userId = params.id
 
   const navigate = useNavigate()
   const [name, setName] = useState('')
@@ -22,7 +23,7 @@ function UserEditScreen() {
 
   const userDetails = useSelector(state => state.userDetails)
   const { error, loading, user } = userDetails
-  navigate(`/admin/user/${userId}/edit}`)
+  //navigate(`/admin/user/${userId}/edit}`)
 
   const userUpdate = useSelector(state => state.userUpdate)
   const { error: errorUpdate, loading: loadingUpdate, success: successUpdate } = userUpdate
