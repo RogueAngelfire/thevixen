@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
 import FormContainer from '../components/FormContainer'
-import { listProductDetails } from '../actions/productActions'
+import { listProductDetails, updateProduct } from '../actions/productActions'
+import { PRODUCT_UPDATE_RESET } from '../constants/productConstants'
 
 
 function ProductEditScreen() {
@@ -27,28 +28,47 @@ function ProductEditScreen() {
   const productDetails = useSelector(state => state.productDetails)
   const { error, loading, product } = productDetails
   // navigate(`/admin/product/${productId}/edit}`)
-  console.log(product.name)
-  console.log(productId)
+  // console.log(product.name)
+  // console.log(productId)
+
+  const productUpdate = useSelector(state => state.productUpdate)
+  const { error: errorUpdate, loading: loadingUpdate, success: successUpdate } = productDetails
 
   useEffect(() => {
-    console.log('outside if')
-    if (!product.name || product._id !== Number(productId)) {
-        dispatch(listProductDetails(productId))
+
+    if(successUpdate){
+      dispatch({type:PRODUCT_UPDATE_RESET})
+      navigate('/admin/productlist')
     } else {
-      setName(product.name)
-      setPrice(product.price)
-      setImage(product.image)
-      setAllergens(product.allergens)
-      setCategory(product.category)
-      setStockCount(product.stockCount)
-      setDescription(product.description)
+      if (!product.name || product._id !== Number(productId)) {
+        dispatch(listProductDetails(productId))
+      } else {
+        setName(product.name)
+        setPrice(product.price)
+        setImage(product.image)
+        setAllergens(product.allergens)
+        setCategory(product.category)
+        setStockCount(product.stockCount)
+        setDescription(product.description)
+      }
     }
-    
-  }, [dispatch, product, productId, navigate])
+
+    // console.log('outside if')
+  
+  }, [dispatch, product, productId, navigate, successUpdate])
 
   const submitHandler = (e) => {
     e.preventDefault()
-    //Update product
+    dispatch(updateProduct({
+      _id:productId,
+      name,
+      price,
+      image,
+      allergens,
+      category,
+      stockCount,
+      description
+    }))
   }
     return (
       <div>
@@ -58,6 +78,8 @@ function ProductEditScreen() {
 
         <FormContainer>
         <h1>Edit Product</h1>
+        {loadingUpdate && <Loader/>}
+        {errorUpdate && <Message variant='danger'>{errorUpdate}</Message>}
 
         {loading ? <Loader/> : error ? <Message variant='danger'>{error}</Message> 
         : (
