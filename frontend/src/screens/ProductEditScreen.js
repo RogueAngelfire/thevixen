@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { Form, Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
@@ -22,22 +23,24 @@ function ProductEditScreen() {
   const [category, setCategory] = useState('')
   const [stockCount, setStockCount] = useState(0)
   const [description, setDescription] = useState('')
+  const [uploading, setUploading] = useState(false)
+
 
   const dispatch = useDispatch()
 
   const productDetails = useSelector(state => state.productDetails)
   const { error, loading, product } = productDetails
-  // navigate(`/admin/product/${productId}/edit}`)
+  //navigate(`/admin/product/${productId}/edit}`)
   // console.log(product.name)
   // console.log(productId)
 
   const productUpdate = useSelector(state => state.productUpdate)
-  const { error: errorUpdate, loading: loadingUpdate, success: successUpdate } = productDetails
+  const { error: errorUpdate, loading: loadingUpdate, success: successUpdate } = productUpdate
 
   useEffect(() => {
 
-    if(successUpdate){
-      dispatch({type:PRODUCT_UPDATE_RESET})
+    if (successUpdate) {
+      dispatch({ type: PRODUCT_UPDATE_RESET })
       navigate('/admin/productlist')
     } else {
       if (!product.name || product._id !== Number(productId)) {
@@ -53,7 +56,7 @@ function ProductEditScreen() {
       }
     }
 
-    // console.log('outside if')
+
   
   }, [dispatch, product, productId, navigate, successUpdate])
 
@@ -70,6 +73,33 @@ function ProductEditScreen() {
       description
     }))
   }
+
+  const uploadFileHandler = async (e) => {
+    const file = e.target.files[0]
+    const formData = new FormData()
+
+    formData.append('image', file)
+    formData.append('product_id', productId)
+      
+    setUploading(true)
+
+    try {
+      const config = {
+        headers:{
+          'Content-Type':'multipart/form-data'
+        }
+      }
+
+      const {data} = await axios.post('/api/products/upload/', formData, config)
+
+      setImage(data)
+      setUploading(false)
+
+    }catch(error){
+      setUploading(false)
+    }
+    }
+
     return (
       <div>
         <Link to='/admin/productlist'>
@@ -117,8 +147,19 @@ function ProductEditScreen() {
                 value={image}
                 onChange={(e) => setImage(e.target.value)}
               >
-
               </Form.Control>
+
+              <Form.File
+                id='image-file'
+                label='Choose File'
+                custom
+                onChange={uploadFileHandler}
+              >
+
+              </Form.File>
+
+              {uploading && <Loader />}
+
             </Form.Group>
 
             <Form.Group controlId='allergens'>
