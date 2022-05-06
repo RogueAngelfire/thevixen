@@ -5,16 +5,30 @@ import { Row, Col, Image, ListGroup, Button, Card, ListGroupItem, Form } from 'r
 import Rating from '../components/Rating'
 import Loader from '../components/Loader'
 import Message from '../components/Message'
-import { listProductDetails } from '../actions/productActions'
+import { listProductDetails, createProductReview } from '../actions/productActions'
+import { PRODUCT_CREATE_REVIEW_RESET } from '../constants/productConstants'
 
 function ProductScreen() {
   const [qty, setQty] = useState(1)
+  const [rating, setRating] = useState(0)
+  const [comment, setComment] = useState('')
   
   const { id } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch()
+
   const productDetails = useSelector(state => state.productDetails)
   const { loading, error, product } = productDetails
+
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
+
+  const productReviewCreate = useSelector(state => state.productReviewCreate)
+  const {
+    loading: loadingProductReview,
+    error: errorProductReview,
+    success: successProductReview,
+  } = productReviewCreate
 
   useEffect(() => {
     dispatch(listProductDetails(id))
